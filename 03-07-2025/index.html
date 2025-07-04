@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="signup-container">
+        <h2 id="form-title">Sign Up</h2>
+        <form id="signup-form">
+            <div class="form-group" id="signup-username-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group" id="signup-confirm-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+            <button type="submit" class="signup-btn" id="form-btn">Sign Up</button>
+        </form>
+        <p id="toggle-text">Already have an account? <a href="#" id="toggle-link">Sign In</a></p>
+    </div>
+    <script>
+        const formTitle = document.getElementById('form-title');
+        const signupForm = document.getElementById('signup-form');
+        const usernameGroup = document.getElementById('signup-username-group');
+        const confirmGroup = document.getElementById('signup-confirm-group');
+        const formBtn = document.getElementById('form-btn');
+        const toggleText = document.getElementById('toggle-text');
+        const toggleLink = document.getElementById('toggle-link');
+        let isSignUp = true;
+
+        toggleLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            isSignUp = !isSignUp;
+            if (isSignUp) {
+                formTitle.textContent = 'Sign Up';
+                usernameGroup.style.display = '';
+                confirmGroup.style.display = '';
+                formBtn.textContent = 'Sign Up';
+                toggleText.innerHTML = 'Already have an account? <a href="#" id="toggle-link">Sign In</a>';
+            } else {
+                formTitle.textContent = 'Sign In';
+                usernameGroup.style.display = 'none';
+                confirmGroup.style.display = 'none';
+                formBtn.textContent = 'Sign In';
+                toggleText.innerHTML = "Don't have an account? <a href=\"#\" id=\"toggle-link\">Sign Up</a>";
+            }
+            // Re-attach event listener to new link
+            document.getElementById('toggle-link').addEventListener('click', arguments.callee);
+        });
+    </script>
+</body>
+</html>
