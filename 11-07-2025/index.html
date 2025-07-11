@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume</title>
+    <style>
+        body {
+            background: #f4f4f4;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .resume {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 40px 50px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 30px;
+            border: 2px solid #000;
+        }
+        .header-info h1 {
+            margin: 0 0 8px 0;
+            font-size: 2.2em;
+            color: #222;
+        }
+        .header-info p {
+            margin: 0;
+            color: #555;
+            font-size: 1.1em;
+        }
+        .section {
+            margin-bottom: 28px;
+        }
+        .section-title {
+            color: #000;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .section-content {
+            color: #222;
+        }
+        .skills-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .skill {
+            background: #e3e3e3;
+            color: #000;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 1em;
+        }
+        .exp-item, .edu-item {
+            margin-bottom: 16px;
+        }
+        .exp-title, .edu-title {
+            font-weight: bold;
+            color: #333;
+        }
+        .exp-company, .edu-school {
+            color: #000;
+            font-size: 1em;
+        }
+        .exp-date, .edu-date {
+            color: #888;
+            font-size: 0.95em;
+        }
+        @media (max-width: 600px) {
+            .resume {
+                padding: 20px 8px;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .avatar {
+                margin-bottom: 15px;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="resume">
+        <div class="header">
+            <div class="header-info">
+                <h1>SAI REDDY GANAPAURAM</h1>
+                <p>Frontend Developer | ganapuramsaireddy@email.com | (123) 456-7890 | Hyderabad, India</p>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-title">Profile</div>
+            <div class="section-content">
+                Passionate and detail-oriented Frontend Developer with 3+ years of experience building responsive web applications using modern technologies. Adept at collaborating in teams and delivering high-quality code.
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-title">Skills</div>
+            <div class="skills-list">
+                <div class="skill">HTML</div>
+                <div class="skill">CSS</div>
+                <div class="skill">JavaScript</div>
+                <div class="skill">React</div>
+                <div class="skill">Git</div>
+                <div class="skill">Bootstrap</div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-title">Experience</div>
+            <div class="section-content">
+                <div class="exp-item">
+                    <div class="exp-title">Frontend Developer</div>
+                    <div class="exp-company">ABC Tech Solutions</div>
+                    <div class="exp-date">June 2022 - Present</div>
+                    <div>Developed and maintained web applications using React, improved site performance by 30%, and collaborated with designers and backend teams.</div>
+                </div>
+                <div class="exp-item">
+                    <div class="exp-title">Web Developer Intern</div>
+                    <div class="exp-company">XYZ Innovations</div>
+                    <div class="exp-date">Jan 2021 - May 2022</div>
+                    <div>Assisted in building landing pages and dashboards, fixed bugs, and learned best practices in web development.</div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-title">Education</div>
+            <div class="section-content">
+                <div class="edu-item">
+                    <div class="edu-title">B.Tech in Computer Science</div>
+                    <div class="edu-school">JNTU Hyderabad</div>
+                    <div class="edu-date">2018 - 2022</div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="section-title">Projects</div>
+            <div class="section-content">
+                <ul>
+                    <li><strong>Portfolio Website:</strong> Personal website to showcase projects and skills. Built with React and hosted on GitHub Pages.</li>
+                    <li><strong>Task Manager App:</strong> A simple to-do app with user authentication and CRUD features using Firebase.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
