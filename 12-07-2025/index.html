@@ -1,0 +1,472 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Speed Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --container-bg: rgba(13, 17, 23, 0.95);
+            --container-border: #21262d;
+            --text: #fff;
+            --accent: #58a6ff;
+            --accent2: #bc8cff;
+            --error: #f85149;
+            --sentence-bg: rgba(88,166,255,0.07);
+            --input-bg: #161b22;
+            --input-border: #21262d;
+            --input-focus: #58a6ff;
+            --progress-bg: #161b22;
+            --progress-gradient: linear-gradient(90deg, #58a6ff 0%, #bc8cff 100%);
+            --result-bg: #232946;
+            --shadow: 0 8px 32px 0 rgba(88,166,255,0.18), 0 0 32px 0 #58a6ff44;
+            --glow: 0 0 12px #58a6ff, 0 0 2px #fff;
+        }
+        body.light-theme {
+            --bg: #f7fafc;
+            --container-bg: #fdfdfd;
+            --container-border: #d1d5db;
+            --text: #232946;
+            --accent: #ff7b54;
+            --accent2: #6c63ff;
+            --error: #e63946;
+            --sentence-bg: #f3f0ff;
+            --input-bg: #f7f7fa;
+            --input-border: #d1d5db;
+            --input-focus: #ff7b54;
+            --progress-bg: #eaecef;
+            --progress-gradient: linear-gradient(90deg, #ff7b54 0%, #6c63ff 100%);
+            --result-bg: #f3f6fb;
+            --shadow: 0 8px 32px 0 #ff7b5422;
+            --glow: 0 0 12px #ff7b5444, 0 0 2px #fff;
+        }
+        body {
+            background: var(--bg);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        .theme-switch {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: inherit;
+        }
+        #theme-switch-landing {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 300;
+        }
+        .theme-btn {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+            border: none;
+            border-radius: 16px;
+            width: 56px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 12px 0 var(--accent2)44;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+            position: relative;
+            outline: none;
+            overflow: hidden;
+        }
+        .theme-btn:active {
+            transform: scale(0.95) rotate(-5deg);
+            box-shadow: 0 0 0 4px var(--accent2)33;
+        }
+        .theme-btn:hover {
+            box-shadow: 0 4px 24px 0 var(--accent2)77;
+            background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+        }
+        .theme-btn .icon {
+            position: absolute;
+            left: 16px;
+            top: 6px;
+            width: 24px;
+            height: 24px;
+            opacity: 0;
+            transform: scale(0.7) rotate(-30deg);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .theme-btn .icon.sun {
+            color: #ffeb3b;
+            filter: drop-shadow(0 0 6px #ffeb3b88);
+        }
+        .theme-btn .icon.moon {
+            color: #fff;
+            filter: drop-shadow(0 0 6px #6c63ff88);
+        }
+        .theme-btn.light .icon.sun {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+        .theme-btn:not(.light) .icon.moon {
+            opacity: 1;
+            transform: scale(1) rotate(0deg);
+        }
+        .theme-label {
+            font-size: 1.05em;
+            font-weight: 600;
+            color: var(--accent2);
+            letter-spacing: 1px;
+            text-shadow: 0 0 4px var(--accent2)33;
+            user-select: none;
+            transition: color 0.2s;
+        }
+        body.light-theme .theme-label {
+            color: var(--accent);
+            text-shadow: 0 0 4px var(--accent)33;
+        }
+        .container {
+            background: var(--container-bg);
+            box-shadow: var(--shadow);
+            border-radius: 24px;
+            padding: 40px 32px 32px 32px;
+            max-width: 500px;
+            width: 100%;
+            color: var(--text);
+            border: 1.5px solid var(--container-border);
+            transition: background 0.3s, color 0.3s, border 0.3s;
+        }
+        .title {
+            font-size: 2.1em;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+            color: var(--accent);
+            text-align: center;
+            text-shadow: var(--glow);
+        }
+        .sentence {
+            font-size: 1.2em;
+            background: var(--sentence-bg);
+            border-radius: 10px;
+            padding: 18px 14px;
+            margin-bottom: 18px;
+            min-height: 60px;
+            box-shadow: 0 2px 8px 0 var(--accent2)22;
+            word-break: break-word;
+            transition: background 0.3s;
+        }
+        .sentence .correct {
+            color: var(--accent);
+            text-shadow: 0 0 4px var(--accent)99;
+        }
+        .sentence .incorrect {
+            color: var(--error);
+            text-decoration: underline wavy var(--error) 2px;
+            background: var(--error)11;
+            border-radius: 2px;
+        }
+        .sentence .current {
+            border-bottom: 2px solid var(--accent2);
+            animation: blink 1s steps(1) infinite;
+        }
+        @keyframes blink {
+            0%, 50% { border-color: var(--accent2); }
+            51%, 100% { border-color: transparent; }
+        }
+        .input-area {
+            width: 100%;
+            padding: 14px 12px;
+            border-radius: 10px;
+            border: 1.5px solid var(--input-border);
+            font-size: 1.1em;
+            background: var(--input-bg);
+            color: var(--text);
+            outline: none;
+            margin-bottom: 18px;
+            font-family: inherit;
+            box-shadow: 0 1px 8px 0 var(--accent2)22;
+            transition: box-shadow 0.2s, border 0.2s, background 0.3s, color 0.3s;
+        }
+        .input-area:focus {
+            border: 1.5px solid var(--input-focus);
+            box-shadow: 0 0 12px 2px var(--input-focus)99;
+        }
+        .input-area:disabled {
+            background: var(--result-bg);
+            color: #888;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+        .stat-label {
+            color: var(--accent2);
+            text-shadow: 0 0 4px var(--accent2)99;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: var(--progress-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 18px;
+            box-shadow: 0 0 8px var(--accent2)44;
+        }
+        .progress {
+            height: 100%;
+            background: var(--progress-gradient);
+            width: 100%;
+            transition: width 0.2s linear;
+            box-shadow: 0 0 16px var(--accent2)99;
+        }
+        .result {
+            display: none;
+            text-align: center;
+            margin-top: 18px;
+        }
+        .result.active {
+            display: block;
+        }
+        .result h2 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            text-shadow: 0 0 8px var(--accent)99;
+        }
+        .restart-btn {
+            margin-top: 18px;
+            padding: 12px 32px;
+            background: var(--progress-gradient);
+            color: var(--bg);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 8px 0 var(--accent2)44;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        }
+        .restart-btn:hover {
+            background: linear-gradient(90deg, var(--accent2) 0%, var(--accent) 100%);
+            color: var(--text);
+            box-shadow: 0 0 16px var(--accent2)99;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 18px 4px 18px 4px;
+            }
+            .title {
+                font-size: 1.3em;
+            }
+            .sentence {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme switch for landing page -->
+    <div class="theme-switch" id="theme-switch-landing">
+        <span class="theme-label" id="theme-label-landing">Dark Mode</span>
+        <button class="theme-btn" id="theme-btn-landing" title="Switch Theme">
+            <!-- Sun Icon -->
+            <svg class="icon sun" id="icon-sun-landing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <g>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </g>
+            </svg>
+            <!-- Moon Icon -->
+            <svg class="icon moon" id="icon-moon-landing" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+            </svg>
+        </button>
+    </div>
+    <!-- Theme switch for typing UI (hidden initially) -->
+    <div class="theme-switch" id="theme-switch-typing" style="display:none;">
+        <span class="theme-label" id="theme-label">Dark Mode</span>
+        <button class="theme-btn" id="theme-btn" title="Switch Theme">
+            <!-- Sun Icon -->
+            <svg class="icon sun" id="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <g>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </g>
+            </svg>
+            <!-- Moon Icon -->
+            <svg class="icon moon" id="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+            </svg>
+        </button>
+    </div>
+    <div id="landing" class="landing-container">
+        <div class="landing-content">
+            <h1 class="landing-title">Welcome to Typing Speed Test</h1>
+            <p class="landing-desc">Test and improve your typing speed with a beautiful, modern, and responsive interface. Track your WPM, accuracy, and errors in real time!</p>
+            <button class="start-btn" id="start-btn">Start Typing</button>
+        </div>
+    </div>
+    <div class="container" id="typing-ui" style="display:none;">
+        <div class="title">Typing Speed Test</div>
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <div class="stats">
+            <div><span class="stat-label">WPM:</span> <span id="wpm">0</span></div>
+            <div><span class="stat-label">Errors:</span> <span id="errors">0</span></div>
+            <div><span class="stat-label">Accuracy:</span> <span id="accuracy">100</span>%</div>
+            <div><span class="stat-label">Time:</span> <span id="timer">60</span>s</div>
+        </div>
+        <div class="sentence" id="sentence"></div>
+        <input type="text" class="input-area" id="input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Start typing here...">
+        <div class="result" id="result">
+            <h2>Test Complete!</h2>
+            <div>WPM: <span id="final-wpm"></span></div>
+            <div>Total Errors: <span id="final-errors"></span></div>
+            <div>Accuracy: <span id="final-accuracy"></span>%</div>
+            <button class="restart-btn" id="restart">Restart</button>
+        </div>
+    </div>
+    <style>
+        .landing-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            width: 100vw;
+            position: fixed;
+            top: 0; left: 0;
+            background: var(--bg);
+            z-index: 100;
+            transition: background 0.3s;
+        }
+        .landing-content {
+            background: var(--container-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 48px 32px 40px 32px;
+            max-width: 420px;
+            width: 90vw;
+            text-align: center;
+            border: 1.5px solid var(--container-border);
+        }
+        .landing-title {
+            font-size: 2.3em;
+            color: var(--accent);
+            margin-bottom: 18px;
+            text-shadow: var(--glow);
+        }
+        .landing-desc {
+            color: var(--text);
+            font-size: 1.1em;
+            margin-bottom: 32px;
+        }
+        .start-btn {
+            padding: 14px 38px;
+            font-size: 1.2em;
+            font-family: inherit;
+            font-weight: bold;
+            color: var(--bg);
+            background: var(--progress-gradient);
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px 0 var(--accent2)44;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.15s;
+        }
+        .start-btn:hover {
+            background: linear-gradient(90deg, var(--accent2) 0%, var(--accent) 100%);
+            color: var(--text);
+            box-shadow: 0 0 16px var(--accent2)99;
+            transform: scale(1.05);
+        }
+        @media (max-width: 600px) {
+            .landing-content {
+                padding: 28px 8px 24px 8px;
+            }
+            .landing-title {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+    <script src="script.js"></script>
+    <script>
+        // Theme switch logic for both landing and typing UI
+        function setTheme(light) {
+            // Typing UI
+            const themeBtn = document.getElementById('theme-btn');
+            const themeLabel = document.getElementById('theme-label');
+            const iconSun = document.getElementById('icon-sun');
+            const iconMoon = document.getElementById('icon-moon');
+            // Landing
+            const themeBtnLanding = document.getElementById('theme-btn-landing');
+            const themeLabelLanding = document.getElementById('theme-label-landing');
+            const iconSunLanding = document.getElementById('icon-sun-landing');
+            const iconMoonLanding = document.getElementById('icon-moon-landing');
+            if (light) {
+                document.body.classList.add('light-theme');
+                if(themeBtn) themeBtn.classList.add('light');
+                if(iconSun) { iconSun.style.opacity = 1; iconSun.style.transform = 'scale(1) rotate(0deg)'; }
+                if(iconMoon) { iconMoon.style.opacity = 0; iconMoon.style.transform = 'scale(0.7) rotate(-30deg)'; }
+                if(themeLabel) themeLabel.textContent = 'Light Mode';
+                if(themeBtnLanding) themeBtnLanding.classList.add('light');
+                if(iconSunLanding) { iconSunLanding.style.opacity = 1; iconSunLanding.style.transform = 'scale(1) rotate(0deg)'; }
+                if(iconMoonLanding) { iconMoonLanding.style.opacity = 0; iconMoonLanding.style.transform = 'scale(0.7) rotate(-30deg)'; }
+                if(themeLabelLanding) themeLabelLanding.textContent = 'Light Mode';
+            } else {
+                document.body.classList.remove('light-theme');
+                if(themeBtn) themeBtn.classList.remove('light');
+                if(iconSun) { iconSun.style.opacity = 0; iconSun.style.transform = 'scale(0.7) rotate(-30deg)'; }
+                if(iconMoon) { iconMoon.style.opacity = 1; iconMoon.style.transform = 'scale(1) rotate(0deg)'; }
+                if(themeLabel) themeLabel.textContent = 'Dark Mode';
+                if(themeBtnLanding) themeBtnLanding.classList.remove('light');
+                if(iconSunLanding) { iconSunLanding.style.opacity = 0; iconSunLanding.style.transform = 'scale(0.7) rotate(-30deg)'; }
+                if(iconMoonLanding) { iconMoonLanding.style.opacity = 1; iconMoonLanding.style.transform = 'scale(1) rotate(0deg)'; }
+                if(themeLabelLanding) themeLabelLanding.textContent = 'Dark Mode';
+            }
+        }
+        let isLight = false;
+        // Add event listeners for both theme buttons
+        const themeBtn = document.getElementById('theme-btn');
+        const themeBtnLanding = document.getElementById('theme-btn-landing');
+        if(themeBtn) themeBtn.addEventListener('click', () => { isLight = !isLight; setTheme(isLight); });
+        if(themeBtnLanding) themeBtnLanding.addEventListener('click', () => { isLight = !isLight; setTheme(isLight); });
+        setTheme(false);
+        // Landing page logic
+        const landing = document.getElementById('landing');
+        const typingUI = document.getElementById('typing-ui');
+        const startBtn = document.getElementById('start-btn');
+        const themeSwitchLanding = document.getElementById('theme-switch-landing');
+        const themeSwitchTyping = document.getElementById('theme-switch-typing');
+        startBtn.addEventListener('click', () => {
+            landing.style.display = 'none';
+            typingUI.style.display = '';
+            if(themeSwitchLanding) themeSwitchLanding.style.display = 'none';
+            if(themeSwitchTyping) themeSwitchTyping.style.display = '';
+        });
+    </script>
+</body>
+</html>
