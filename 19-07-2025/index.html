@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 700px;
+        }
+        .bulb {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+        }
+        .bulb__light {
+            height: 300px;
+            width: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .bulb__light img {
+            width: 250px;
+            height: 250px;        
+        }
+         button{
+            height: 40px;
+            width: 100px;
+            background-color: black;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="bulb">
+            <div class="bulb__light">
+                <img src="image1.png" alt="Bulb Image">
+            </div>
+            <div class="bulb__base">
+                <button>Switch On</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        const bulbLight = document.querySelector('.bulb__light');
+        const switchButton = document.querySelector('.bulb__base button');
+        const bulb = document.querySelector('.bulb');
+        console.dir(bulb);
+
+        switchButton.addEventListener('click', () => {
+            const bulbImg = bulbLight.querySelector('img');
+            if (bulbImg.src.includes('image1.png')) {
+                bulbImg.src = 'image.png';
+                switchButton.textContent = 'Switch Off';
+
+            } else {
+                bulbImg.src = 'image1.png';
+                switchButton.textContent = 'Switch On';
+            }
+        });
+    </script>
+</body>
+</html>
